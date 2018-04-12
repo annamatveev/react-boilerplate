@@ -5,12 +5,12 @@ import { createSelector } from 'reselect';
  */
 const selectPrivateRouteDomain = (state) => state.get('privateRoute');
 
-const makeSelectPrivateRoute = () => createSelector(
+const makeSelectIsAutenticated = () => createSelector(
   selectPrivateRouteDomain,
   (substate) => substate.get('isAuthenticated')
 );
 
-export default makeSelectPrivateRoute;
+export default makeSelectIsAutenticated;
 export {
   selectPrivateRouteDomain,
 };

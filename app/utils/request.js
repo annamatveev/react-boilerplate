@@ -39,8 +39,29 @@ function checkStatus(response) {
  *
  * @return {object}           The response data
  */
-export default function request(url, options) {
+export function getRequest(url, options) {
   return fetch(url, options)
     .then(checkStatus)
     .then(parseJSON);
+}
+
+export function postRequest(url, options) {
+  return fetch(url, { ...options,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(checkStatus)
+    .then(parseJSON);
+}
+
+export function mockRequest(url) {
+  const user = { id: 1, username: 'annam' };
+  console.log(`Mocking server ${url} with: ${user.username}`);
+  return new Promise(
+    (resolve, reject) => {
+      resolve(user);
+    }
+  );
 }

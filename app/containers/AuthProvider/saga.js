@@ -1,9 +1,9 @@
 import { take, call, put, fork, race } from 'redux-saga/effects';
 import { browserHistory } from 'react-router';
 import { loginRequestStart, loginRequestFail, loginRequestFinish,
-         logoutRequestStart, logoutRequestFail, logoutRequestFinish,
-         restoreRequestStart, restoreRequestFail, restoreRequestFinish,
-         loginSuccess, logoutSuccess, restoreSuccess } from './actions';
+  logoutRequestStart, logoutRequestFail, logoutRequestFinish,
+  restoreRequestStart, restoreRequestFail, restoreRequestFinish,
+  loginSuccess, logoutSuccess, restoreSuccess } from './actions';
 import { LOGOUT_REQUEST, LOGIN_REQUEST } from './constants';
 import { mockRequest } from '../../utils/request';
 

@@ -14,16 +14,21 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import HomePage from 'containers/HomePage/Loadable';
+import HomePage from 'containers/HomePage';
+import AuthProvider from 'containers/AuthProvider/Loadable';
+import PrivateRoute from 'containers/PrivateRoute';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
+
 
 export default function App() {
   return (
-    <div>
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route component={NotFoundPage} />
-      </Switch>
-    </div>
+    <AuthProvider>
+      <div>
+        <Switch>
+          <PrivateRoute path="/private" renderComponent={() => <HomePage />} />
+          <Route path="" component={NotFoundPage} />
+        </Switch>
+      </div>
+    </AuthProvider>
   );
 }

@@ -5,47 +5,70 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { Route, Redirect, withRouter } from 'react-router-dom';
 
+import makeSelectIsAuthenticated from 'containers/AuthProvider/selectors';
 
-import injectSaga from 'utils/injectSaga';
-import injectReducer from 'utils/injectReducer';
-import makeSelectPrivateRoute from './selectors';
-import reducer from './reducer';
-import saga from './saga';
+class PrivateRoute extends React.Component {
 
-const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) => (
-    isAuthenticated ? (
-      <Component {...props} />
-    ) : (
-      <Redirect
-        to={{
-          pathname: '/login',
-          state: { from: props.location },
-        }}
-      />
-    )
-  )}
-  />
-)
-PrivateRoute.propTypes = {
-  isAuthenticated: PropTypes.bool,
-  component: PropTypes.object,
-  location: PropTypes.string,
-};
+  constructor(props) {
+    super(props);
+    console.log('kakki constructor', this);
+  }
+
+  render() {
+    console.log('kaki', this);
+    const { renderComponent, isAuthenticated, ...rest } = this.props;
+    if (!isAuthenticated) {
+      return <Route {...rest} render={() => <div>Fuck you mroe!</div>} />;
+    }
+    return <Route {...rest} render={renderComponent} />;
+  }
+
+}
+
 
 const mapStateToProps = createStructuredSelector({
-  privateRoute: makeSelectPrivateRoute(),
+  isAuthenticated: makeSelectIsAuthenticated(),
 });
 
 const withConnect = connect(mapStateToProps);
-const withReducer = injectReducer({ key: 'privateRoute', reducer });
-const withSaga = injectSaga({ key: 'privateRoute', saga });
 
-export default compose(
-  withReducer,
-  withSaga,
-  withConnect,
-  withRouter
-)(PrivateRoute);
+export default withConnect(PrivateRoute);
+
+
+// const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
+//   console.log('kaki', isAuthenticated);
+//   return (
+//     <Route
+//       {...rest}
+//       render={(props) => (
+//         isAuthenticated ? (
+//           <Component {...props} />
+//         ) : (
+//           <Redirect
+//             to={{
+//               pathname: '/login',
+//               state: { from: props.location },
+//             }}
+//           />
+//         )
+//       )}
+//     />
+//   );
+// };
+//
+// PrivateRoute.propTypes = {
+//   isAuthenticated: PropTypes.bool,
+//   component: PropTypes.object,
+//   location: PropTypes.string,
+// };
+//
+// const mapStateToProps = createStructuredSelector({
+//   isAuthenticated: makeSelectIsAuthenticated(),
+// });
+//
+// const withConnect = connect(mapStateToProps);
+//
+// export default compose(
+//   withConnect,
+//   withRouter
+// )(PrivateRoute);
