@@ -7,7 +7,14 @@ const makeSelectIsAuthenticated = () => createSelector(
   (substate) => substate.get('isAuthenticated')
 );
 
+const makeSelectLoggedInUser = () => createSelector(
+  selectAuthProviderDomain,
+  (substate) => substate.get('loggedIn').username
+);
+
+
 export {
   selectAuthProviderDomain,
   makeSelectIsAuthenticated,
+  makeSelectLoggedInUser,
 };
