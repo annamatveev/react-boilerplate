@@ -16,16 +16,15 @@ import { Switch, Route } from 'react-router-dom';
 
 import HomePage from 'containers/HomePage';
 import AuthProvider from 'containers/AuthProvider/Loadable';
-import PrivateRoute from 'containers/PrivateRoute';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
-
+import PrivateRoute from 'containers/PrivateRoute/Loadable';
 
 export default function App() {
   return (
     <AuthProvider>
       <div>
         <Switch>
-          <PrivateRoute path="/private" renderComponent={() => <HomePage />} />
+          <PrivateRoute path="/private" component={HomePage} />
           <Route path="" component={NotFoundPage} />
         </Switch>
       </div>

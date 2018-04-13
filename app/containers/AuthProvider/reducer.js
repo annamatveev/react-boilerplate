@@ -17,18 +17,24 @@ const initialState = fromJS({
 
 function privateRouteReducer(state = initialState, action) {
   if (action.error) {
-    return { ...state, error: action.payload };
+    return state
+      .set('error', action.payload);
   }
   switch (action.type) {
     case LOGIN_SUCCESS:
     case RESTORE_SUCCESS:
-      return { ...state, loggedIn: action.payload.user, isAuthenticated: true };
+      return state
+        .set('loggedIn', action.payload.user)
+        .set('isAuthenticated', true);
     case LOGOUT_SUCCESS:
-      return { ...state, username: '', isAuthenticated: false };
+      return state
+        .set('username', '')
+        .set('isAuthenticated', false);
     case SENDING_LOGIN_REQUEST:
     case SENDING_LOGOUT_REQUEST:
     case SENDING_RESTORE_REQUEST:
-      return { ...state, currentlySending: action.meta.sending };
+      return state
+        .set('currentlySending', action.meta.sending);
     default:
       return state;
   }
