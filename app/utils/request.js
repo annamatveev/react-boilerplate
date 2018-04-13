@@ -40,13 +40,16 @@ function checkStatus(response) {
  * @return {object}           The response data
  */
 export function getRequest(url, options) {
-  return fetch(url, options)
+  return fetch(url, { ...options,
+    credentials: 'include',
+  })
     .then(checkStatus)
     .then(parseJSON);
 }
 
 export function postRequest(url, options) {
   return fetch(url, { ...options,
+    credentials: 'include',
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -60,7 +63,7 @@ export function mockRequest(url) {
   const user = { id: 1, username: 'annam' };
   console.log(`Mocking server ${url} with: ${user.username}`);
   return new Promise(
-    (resolve, reject) => {
+    (resolve) => {
       resolve(user);
     }
   );
