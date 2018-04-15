@@ -5,15 +5,16 @@ import { loginRequestStart, loginRequestFail, loginRequestFinish,
   restoreRequestStart, restoreRequestFail, restoreRequestFinish,
   loginSuccess, logoutSuccess, restoreSuccess } from './actions';
 import { LOGOUT_REQUEST, LOGIN_REQUEST } from './constants';
-import { mockRequest } from '../../utils/request';
+import { postRequest } from '../../utils/request';
 
-const BASE_URL = 'https://localhost:3000';
+const BASE_URL = 'http://localhost:3000/users';
 
 
 export function* loginFlow() {
   while (true) {
     const request = yield take(LOGIN_REQUEST);
-    const { username, password } = request.data;
+    const username = 'admin';
+    const password = 'amspassword';
 
     // A `LOGOUT` action may happen while the `authorize` effect is going on, which may
     // lead to a race condition. This is unlikely, but just in case, we call `race` which
@@ -37,7 +38,7 @@ export function* login({ username, password }) {
     const options = {
       body: { username, password },
     };
-    return yield call(mockRequest, `${BASE_URL}/sign_in.json`, options);
+    return yield call(postRequest, `${BASE_URL}/sign_in.json`, options);
   } catch (error) {
     yield put(loginRequestFail());
     return false;
@@ -60,7 +61,7 @@ export function* logout() {
   yield put(logoutRequestStart());
 
   try {
-    return yield call(mockRequest, `${BASE_URL}/sign_out.json`);
+    return yield call(postRequest, `${BASE_URL}/sign_out.json`);
   } catch (error) {
     yield put(logoutRequestFail());
     return false;
@@ -88,7 +89,7 @@ export function* restore() {
   yield put(restoreRequestStart());
 
   try {
-    return yield call(mockRequest, `${BASE_URL}/sign_in.json`);
+    return yield call(postRequest, `${BASE_URL}/sign_in.json`);
   } catch (error) {
     yield put(restoreRequestFail());
     return false;

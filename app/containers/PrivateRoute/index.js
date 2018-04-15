@@ -5,19 +5,19 @@ import { createStructuredSelector } from 'reselect';
 import { Route, Redirect } from 'react-router-dom';
 import { makeSelectIsAuthenticated, makeSelectLoggedInUser } from 'containers/AuthProvider/selectors';
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
+const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
   console.log(rest);
   return (
     <Route
       {...rest}
-      render={(props) =>
-        rest.isAuthenticated ? (
-          <Component {...props} loggedIn={rest.loggedIn} />
+      render={(routeProps) =>
+        isAuthenticated ? (
+          <Component {...routeProps} loggedIn={rest.loggedIn} />
         ) : (
           <Redirect
             to={{
               pathname: '/login',
-              state: { from: props.location },
+              state: { from: routeProps.location },
             }}
           />
         )
@@ -28,6 +28,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 
 PrivateRoute.propTypes = {
   component: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
   location: PropTypes.object,
 };
 
