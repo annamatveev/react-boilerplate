@@ -1,4 +1,4 @@
-import { take, call, put, fork, race } from 'redux-saga/effects';
+import { take, takeEvery, call, put, fork, race } from 'redux-saga/effects';
 import { browserHistory } from 'react-router';
 import { loginRequestStart, loginRequestFail, loginRequestFinish,
   logoutRequestStart, logoutRequestFail, logoutRequestFinish,
@@ -11,11 +11,9 @@ const BASE_URL = 'http://localhost:3000/users';
 
 
 export function* loginFlow() {
-  while (true) {
-    const request = yield take(LOGIN_REQUEST);
+  yield takeEvery(LOGIN_REQUEST, function* (action) {
     const username = 'admin';
     const password = 'amspassword';
-
     // A `LOGOUT` action may happen while the `authorize` effect is going on, which may
     // lead to a race condition. This is unlikely, but just in case, we call `race` which
     // returns the "winner", i.e. the one that finished first
@@ -28,7 +26,7 @@ export function* loginFlow() {
       yield put(loginSuccess(winner.auth));
       // TODO: Handle login form reset
     }
-  }
+  });
 }
 
 export function* login({ username, password }) {
@@ -48,13 +46,12 @@ export function* login({ username, password }) {
 }
 
 export function* logoutFlow() {
-  while (true) {
-    yield take(LOGOUT_REQUEST);
+  yield takeEvery(LOGOUT_REQUEST, function* () {
     yield put(logoutSuccess());
 
     yield call(logout);
     forwardTo('/');
-  }
+  });
 }
 
 export function* logout() {
